@@ -11,7 +11,10 @@ class ScrappingService{
         this.User = new User();
     }
     async start(){
-        this.browser = await this.puppeteer.launch({headless: false});
+        this.browser = await this.puppeteer.launch({
+            args: ['--no-sandbox'],
+            timeout: 10000,
+          });
         this.page = await this.browser.newPage();
     }
     async close(){
