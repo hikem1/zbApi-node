@@ -46,26 +46,6 @@ class ScrappingService{
         await this.browser.close();
         return data;
     }
-    // async login(email, password){
-    //     const url = 'https://www.zonebourse.com/async/login';
-    //     const options = {method: 'POST'};
-    //     const formData = new FormData();
-    //     formData.append('login', email);
-    //     formData.append('password', password);
-    //     formData.append('remember', 'on');
-    //     options.body = formData;
-        
-    //     return fetch(url, options)
-    //     .then(data => data.json())
-    //     .then(data => {
-    //         if(!data.error){
-    //             this.User.setEmail(email);
-    //             this.User.setPassword(password);
-    //             this.User.setAuthStatus(!data.error);
-    //         }
-    //         return data;
-    //     })
-    // }
     async getPrivateGraphLink(id, link){
         const url = this.baseUrl + link + "graphiques/"
         const email = this.User.getEmail()
