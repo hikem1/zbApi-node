@@ -7,12 +7,13 @@ const PORT = 3000;
 let scrap = new ScrappingService()
 
 app.use(cors({
-  origin: ["http://localhost:4200", "http://4.233.147.4"]
+  origin: "http://4.233.147.4"
 }))
 
 app.get('/search/:keyword', async (req, res) => {
   const keyword = req.params.keyword;
-
+  console.log("search");
+  
   if (!keyword) {
     return res.status(400).send("keyword is required");
   }
@@ -52,6 +53,7 @@ app.get('/graph-link', async (req, res) => {
 app.get('/login', async (req, res) => {
   const email = req.query.email;
   const password = req.query.password;
+  console.log("login");
 
   try {
     const user = await scrap.User.login(email, password)
