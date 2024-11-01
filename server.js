@@ -1,9 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const ScrappingService = require('./ScrappingService.js');
 
 const app = new express();
-let scrap = new ScrappingService()
 const PORT = 3000;
+let scrap = new ScrappingService()
+
+app.use(cors({
+  origin: ["http://localhost:4200", "http://4.233.147.4"]
+}))
 
 app.get('/search/:keyword', async (req, res) => {
   const keyword = req.params.keyword;
@@ -48,26 +53,18 @@ app.get('/login', async (req, res) => {
   const email = req.query.email;
   const password = req.query.password;
 
-  if (email && password) {
-    try {
-      const data = await scrap.User.login(email, password)
-      res.send(data);
-    } catch (error) {
-      res.status(500).send("Internal Server Error");
-    }
-  } else {
-    return res.status(400).send("email and password are required");
+  try {
+    const user = await scrap.User.login(email, password)
+    res.send(user.publicUser());
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
   }
+  
 });
 
 app.get('/logout', (req, res) => {
-  
-  if(!scrap.User.getAuthStatus()){
-    res.send("You'r not connected !")
-  }else {
     scrap = new ScrappingService();
-    res.send('Successfully disconnected !');
-  }
+    res.send(scrap.User.publicUser());
 })
 
 app.listen(PORT, () => {
