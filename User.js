@@ -1,7 +1,8 @@
 class User{
-    email;
-    password;
-    authStatus;
+    email = "";
+    password = "";
+    authStatus = false;
+    message = "";
 
     async login(email, password){
         const url = 'https://www.zonebourse.com/async/login';
@@ -15,31 +16,47 @@ class User{
         return fetch(url, options)
         .then(data => data.json())
         .then(data => {
-            if(!data.error){
-                this.setEmail(email);
-                this.setPassword(password);
-                this.setAuthStatus(!data.error);
-            }
-            return data;
+            this.setEmail(email);
+            this.setPassword(password);
+            this.setAuthStatus(!data.error);
+            this.setMessage(data.message)
+            return this;
         })
     }
+    publicUser(){
+        return {
+            "email": this.getEmail(),
+            "authStatus": this.getAuthStatus(),
+            "message": this.getMessage()
+        }
+    }
     setEmail(email) {
-        this.email = email;
+        this.email = email
+        return this;
     }
     getEmail(){
         return this.email;
     }
     setPassword(password){
         this.password = password;
+        return this;
     }
     getPassword(){
         return this.password;
     }
     setAuthStatus(authStatus){
         this.authStatus = authStatus;
+        return this;
     }
     getAuthStatus(){
         return this.authStatus;
+    }
+    setMessage(message){
+        this.message = message;
+        return this;
+    }
+    getMessage(){
+        return this.message;
     }
 };
 
