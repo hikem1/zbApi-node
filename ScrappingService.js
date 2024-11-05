@@ -1,4 +1,6 @@
+require('dotenv').config();
 const User = require('./User.js')
+const headless = Number(process.env.PUPPETEER_HEADLESS) ? true : false;
 
 class ScrappingService{
     baseUrl = 'https://www.zonebourse.com';
@@ -12,6 +14,7 @@ class ScrappingService{
     }
     async start(){
         this.browser = await this.puppeteer.launch({
+            headless: headless,
             args: ['--no-sandbox'],
             timeout: 10000,
           });
@@ -46,13 +49,13 @@ class ScrappingService{
                 };
             });
         });
-        await this.browser.close();
         return data;
     }
-    async getPrivateGraphLink(id, link){
+    async getPrivateGraphLink(id, link, user){
         const url = this.baseUrl + link + "graphiques/"
-        const email = this.User.getEmail()
-        const password = this.User.getPassword()
+        
+        const email = user.getEmail()
+        const password = user.getPassword()
         // log to page
         await this.page.goto(url);
         await this.page.evaluate((email, password)=>{
@@ -67,6 +70,18 @@ class ScrappingService{
         await this.page.waitForSelector('#dropdownLoged');
         const iframSelector = await this.page.waitForSelector('#prt_dynamic_chart_' + id);
         return await iframSelector?.evaluate(el => el.getAttribute("src"));
+    }
+    async login(email, password){
+        const url = 'https://www.zonebourse.com/async/login';
+        const options = {method: 'POST'};
+        const formData = new FormData();
+        formData.append('login', email);
+        formData.append('password', password);
+        formData.append('remember', 'on');
+        options.body = formData;
+        
+        return fetch(url, options)
+        .then(data => { return data.json() })
     }
 }
   
