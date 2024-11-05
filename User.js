@@ -16,11 +16,18 @@ class User{
         return fetch(url, options)
         .then(data => data.json())
         .then(data => {
-            this.setEmail(email);
-            this.setPassword(password);
-            this.setAuthStatus(!data.error);
-            this.setMessage(data.message)
-            return this;
+            if(!data.error){
+                this.setEmail(email);
+                this.setPassword(password);
+                this.setAuthStatus(!data.error);
+                this.setMessage(data.message);
+                return this;
+            }else{
+                return error = {
+                    code: 400,
+                    message: data.message
+                };
+            }
         })
     }
     publicUser(){
