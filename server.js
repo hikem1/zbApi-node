@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/search/:keyword', async (req, res) => {
+app.get('/api/search/:keyword', async (req, res) => {
   const keyword = req.params.keyword;
   const timeout = setTimeout(() => {
     if (!isResponseSent) {
@@ -62,7 +62,7 @@ app.get('/search/:keyword', async (req, res) => {
   }
 });
 
-app.get('/graph-link', async (req, res) => {
+app.get('/api/graph-link', async (req, res) => {
   const id = req.query.id;
   const link = req.query.link;
   const timeout = setTimeout(() => {
@@ -103,7 +103,7 @@ app.get('/graph-link', async (req, res) => {
   }
 });
 
-app.get('/login', async (req, res) => {
+app.get('/api/login', async (req, res) => {
   const email = req.query.email;
   const password = req.query.password;
   const timeout = setTimeout(() => {
@@ -139,7 +139,7 @@ app.get('/login', async (req, res) => {
   }
 });
 
-app.get('/logout', (req, res) => {
+app.get('/api/logout', (req, res) => {
     user = new User();
     res.send(user.publicUser());
 })
